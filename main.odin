@@ -2,7 +2,7 @@ package main
 
 import "core:fmt"
 
-
+time_delta: f32
 
 main :: proc() {
 	fmt.println("Piotr Pushowski and the Crates")
