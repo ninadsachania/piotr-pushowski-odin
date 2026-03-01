@@ -97,19 +97,19 @@ game_load :: proc() {
 }
 
 main :: proc() {
-	width  := window_width
+    width  := window_width
     height := window_height
 
     rl.InitWindow(window_width, window_height, "Piotr Pushowski and the Crates")
 
-	init()
-	game_set_scene(.SPLASH);
+    init()
+    game_set_scene(.SPLASH);
 
-	time_prev = rl.GetTime()
+    time_prev = rl.GetTime()
 
-	// @Uncomment audio_update();
+    // @Uncomment audio_update();
 
-	for !rl.WindowShouldClose() {
+    for !rl.WindowShouldClose() {
         rl.BeginDrawing()
 
         // @Temporary.
@@ -131,12 +131,57 @@ main :: proc() {
 }
 
 render :: proc() {
-    // @Stub.
+    if (scene_reveal >= 1) {
+        #partial switch current_scene {
+            // @Uncomment case .GAME:   scene_game_update()
+            // @Uncomment case .TITLE:  scene_title_update()
+            case .SPLASH: scene_splash_update()
+        }
+    }
+
+    fade_speed :: 2.5
+
+    if next_scene != .NONE {
+        scene_reveal -= time_delta * fade_speed
+        if scene_reveal < 0 {
+            scene_reveal = 0
+            current_scene = next_scene
+            next_scene = .NONE
+
+            if current_scene != .SPLASH {
+                // @Uncomment audio_play_sound(sound_scene_swish, true)
+            }
+
+            #partial switch current_scene {
+                // @Uncomment case .TITLE:  scene_title_enter()
+                // @Uncomment case .GAME:   scene_game_enter()
+                // @Uncomment case .QUIT:   scene_quit_enter()
+                case .SPLASH: scene_splash_enter()
+            }
+        }
+    } else {
+        scene_reveal += time_delta * fade_speed
+        if scene_reveal > 1 {
+            scene_reveal = 1
+        }
+    }
 }
 
 
 update :: proc() {
-    // @Stub.
+    border_color := Vector4{8 / 255.0, 8 / 255.0, 8 / 255.0, 1}
+
+    if current_scene == .SPLASH {
+        rl.ClearBackground(rl.ColorFromNormalized([4]f32{pal[0].x, pal[0].y, pal[0].z, pal[0].w}))
+
+        #partial switch current_scene {
+            case .SPLASH: scene_splash_render()
+        }
+    } else {
+        //
+        // @Incomplete. MAKE THIS WORK!
+        //
+    }
 }
 
 init :: proc() {
