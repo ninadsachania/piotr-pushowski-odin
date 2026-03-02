@@ -130,7 +130,7 @@ main :: proc() {
     rl.CloseWindow()
 }
 
-render :: proc() {
+update :: proc() {
     if (scene_reveal >= 1) {
         #partial switch current_scene {
             // @Uncomment case .GAME:   scene_game_update()
@@ -168,7 +168,7 @@ render :: proc() {
 }
 
 
-update :: proc() {
+render :: proc() {
     border_color := Vector4{8 / 255.0, 8 / 255.0, 8 / 255.0, 1}
 
     if current_scene == .SPLASH {
