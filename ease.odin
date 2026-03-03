@@ -36,10 +36,8 @@ EaseFunc :: enum {
     BOUNCE_IN_OUT,
 }
 
-ease_interp :: proc(func : EaseFunc, start: i32, end: i32, t: f32) -> i32
-{
-    // @Stub
-    return 0
+ease_interp :: proc(func: EaseFunc, start: f32, end: f32, t: f32) -> f32 {
+    return start + ((end - start) * value(func, t));
 }
 
 // Map t so that:
@@ -95,7 +93,7 @@ cubic_in :: proc(t: f32) -> f32 {
 }
 
 cubic_out :: proc(t: f32) -> f32 {
-    f : f32 = t - 1
+    f: f32 = t - 1
     return (f * f * f) + 1
 }
 
@@ -104,7 +102,7 @@ cubic_in_out :: proc(t: f32) -> f32 {
         return 4 * t * t * t
     }
     else {
-        f : f32 = (2 * t) - 2
+        f: f32 = (2 * t) - 2
         return (0.5 * f * f * f) + 1
     }
 }
@@ -114,7 +112,7 @@ quartic_in :: proc(t: f32) -> f32 {
 }
 
 quartic_out :: proc(t: f32) -> f32 {
-    f : f32 = t - 1
+    f: f32 = t - 1
     return (f * f * f * (1 - t)) + 1
 }
 
@@ -123,7 +121,7 @@ quartic_in_out :: proc(t: f32) -> f32 {
         return 8 * t * t * t * t
     }
     else {
-        f : f32 = t - 1
+        f: f32 = t - 1
         return (-8 * f * f * f * f) + 1
     }
 }
@@ -133,7 +131,7 @@ quantic_in :: proc(t: f32) -> f32 {
 }
 
 quantic_out :: proc(t: f32) -> f32 {
-    f : f32 = t - 1
+    f: f32 = t - 1
     return (f * f * f * f * f) + 1
 }
 
@@ -142,7 +140,7 @@ quantic_in_out :: proc(t: f32) -> f32 {
         return 16 * t * t * t * t * t
     }
     else {
-        f : f32 = (2 * t) - 2
+        f: f32 = (2 * t) - 2
         return (0.5 * f * f * f * f * f) + 1
     }
 }
@@ -194,17 +192,17 @@ back_in :: proc(t: f32) -> f32 {
 }
 
 back_out :: proc(t: f32) -> f32 {
-    f : f32 = 1 - t
+    f: f32 = 1 - t
     return 1 - ((f * f * f) - (f * math.sin(f * math.PI)))
 }
 
 back_in_out :: proc(t: f32) -> f32 {
     if t < 0.5 {
-        f : f32 = 2 * t
+        f: f32 = 2 * t
         return 0.5 * ((f * f * f) - (f * math.sin(f * math.PI)))
     }
     else {
-        f : f32 = 1 - ((2 * t) - 1)
+        f: f32 = 1 - ((2 * t) - 1)
         return (0.5 * (1 - ((f * f * f) - (f * math.sin(f * math.PI))))) + 0.5
     }
 }
@@ -293,12 +291,12 @@ value :: proc(func: EaseFunc, t: f32) -> f32 {
 
 round_to_int :: proc(f: f32) -> int {
     if f < 0.0 {
-        return cast (int)(f - 0.5)
+        return cast(int) (f - 0.5)
     } else {
-        return cast (int)(f + 0.5)
+        return cast(int) (f + 0.5)
     }    
 }
 
 round_to_uint :: proc(f: f32) -> u64 {
-    return cast (u64)(f + 0.5)
+    return cast(u64) (f + 0.5)
 }

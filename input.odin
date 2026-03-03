@@ -1,6 +1,6 @@
 package main
 
-import "base:intrinsics"
+import rl "vendor:raylib"
 
 Button :: enum {
     ESCAPE,
@@ -22,12 +22,60 @@ ButtonState :: struct {
 }
 
 button_was_pressed: [128] ButtonState
-button_pressed: [128] ButtonState
+button_pressed:     [128] ButtonState
 
 input_handle_keyboard_event :: proc() { // @Change.
     //
     // @Incomplete.
     //
+
+    //
+    // WARNING!!! @Bug! @Bug! @Bug! @Refactor! This is probably wrong.
+    //
+
+    if rl.IsKeyPressed(.LEFT) || rl.IsKeyPressed(.A) {
+        update_button(.LEFT, true);
+    } else {
+        update_button(.LEFT, false);
+    }
+
+    if rl.IsKeyPressed(.RIGHT) || rl.IsKeyPressed(.D) {
+        update_button(.RIGHT, true);
+    } else {
+        update_button(.RIGHT, false);
+    }
+
+    if rl.IsKeyPressed(.UP) || rl.IsKeyPressed(.W) {
+        update_button(.UP, true);
+    } else {
+        update_button(.UP, false);
+    }
+
+    if rl.IsKeyPressed(.DOWN) || rl.IsKeyPressed(.S) {
+        update_button(.DOWN, true);
+    } else {
+        update_button(.DOWN, false);
+    }
+
+    if rl.IsKeyPressed(.ENTER) || rl.IsKeyPressed(.SPACE) {
+        update_button(.SELECT, true);
+    } else {
+        update_button(.SELECT, false);
+    }
+
+    if rl.IsKeyPressed(.BACKSPACE) {
+        update_button(.RESET, true);
+    } else {
+        update_button(.RESET, false);
+    }
+
+    if rl.IsKeyPressed(.ESCAPE) {
+        update_button(.ESCAPE, true);
+        update_button(.CANCEL, true);
+    } else {
+        update_button(.ESCAPE, false);
+        update_button(.CANCEL, false);
+    }
 
     /*
     key := ev.key_code;

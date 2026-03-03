@@ -55,7 +55,7 @@ scene_reveal: f32 = 0.0;
 save_game_file: string;
 save_game_path: string;
 
-SAVE_VERSION: u32 : 1;
+SAVE_VERSION: u32: 1;
 
 // @Scope #scope_module
 
@@ -65,9 +65,9 @@ game_set_scene :: proc(scene: SceneType) {
     }
 
     #partial switch current_scene {
-        // @Uncomment case .TITLE:  scene_title_exit()
-        // @Uncomment case .GAME:   scene_game_exit()
-        // @Uncomment case .SPLASH: scene_splash_exit()
+        case .TITLE:  scene_title_exit()
+        case .GAME:   scene_game_exit()
+        case .SPLASH: scene_splash_exit()
     }
 
     next_scene = scene
@@ -101,6 +101,8 @@ main :: proc() {
     height := window_height
 
     rl.InitWindow(window_width, window_height, "Piotr Pushowski and the Crates")
+    rl.SetTargetFPS(60); // @Hardcoded.
+    rl.SetExitKey(.KEY_NULL);
 
     init()
     game_set_scene(.SPLASH);
@@ -109,11 +111,10 @@ main :: proc() {
 
     // @Uncomment audio_update();
 
-    for !rl.WindowShouldClose() {
+    for !rl.WindowShouldClose() && !should_quit_game {
         rl.BeginDrawing()
 
-        // @Temporary.
-        rl.ClearBackground(rl.BLACK);
+        input_handle_keyboard_event()
 
         time_current := rl.GetTime()
         time_delta = auto_cast (time_current - time_prev)
@@ -121,6 +122,8 @@ main :: proc() {
 
         update()
         render()
+
+        input_frame_end()
 
         frame_count += 1
 
@@ -133,8 +136,8 @@ main :: proc() {
 update :: proc() {
     if (scene_reveal >= 1) {
         #partial switch current_scene {
-            // @Uncomment case .GAME:   scene_game_update()
-            // @Uncomment case .TITLE:  scene_title_update()
+            case .GAME:   scene_game_update()
+            case .TITLE:  scene_title_update()
             case .SPLASH: scene_splash_update()
         }
     }
@@ -153,9 +156,9 @@ update :: proc() {
             }
 
             #partial switch current_scene {
-                // @Uncomment case .TITLE:  scene_title_enter()
-                // @Uncomment case .GAME:   scene_game_enter()
-                // @Uncomment case .QUIT:   scene_quit_enter()
+                case .TITLE:  scene_title_enter()
+                case .GAME:   scene_game_enter()
+                case .QUIT:   scene_quit_enter()
                 case .SPLASH: scene_splash_enter()
             }
         }
@@ -181,7 +184,22 @@ render :: proc() {
         //
         // @Incomplete. MAKE THIS WORK!
         //
+
+        rl.ClearBackground(rl.ColorFromNormalized([4]f32{pal[0].x, pal[0].y, pal[0].z, pal[0].w}))
+
+        #partial switch current_scene {
+            case .GAME:  scene_game_render();
+            case .TITLE: scene_title_render();
+        }
+
+        scene_fade();
+
     }
+}
+
+
+scene_fade :: proc() {
+    // @Stub. @Incomplete.
 }
 
 init :: proc() {
@@ -196,8 +214,8 @@ init :: proc() {
     assets_init();
     // @Uncomment map_init();
 
-    // @Uncomment scene_title_init();
-    // @Uncomment scene_game_init();
+    scene_title_init();
+    scene_game_init();
 }
 
 Vector4 :: struct {
@@ -208,4 +226,8 @@ Vector4 :: struct {
     w: f32,
 }
 
-U16_MAX: int : 65535
+U16_MAX: int: 65535
+
+lerp :: proc(start: f32, end: f32, amount: f32) -> f32 {
+    return start + (end - start) * amount;
+}
