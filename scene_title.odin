@@ -120,15 +120,15 @@ scene_title_render :: proc() {
     tt := ease_interp(.BOUNCE_IN, 0.0, 1.0, (1 - t))
     offset = auto_cast (tt * (-110))
 
-    draw_copy(arts, sprite_title_text1, Vector2i{12, auto_cast (8 + offset)}, Vector4{1, 1, 1, 1})
-    draw_copy(arts, sprite_title_text2, Vector2i{48, auto_cast (64 + offset)}, Vector4{1, 1, 1, 1})
+    draw_copy(&arts, sprite_title_text1, Vector2i{12, auto_cast (8 + offset)}, Vector4{1, 1, 1, 1})
+    draw_copy(&arts, sprite_title_text2, Vector2i{48, auto_cast (64 + offset)}, Vector4{1, 1, 1, 1})
 
     // Art
     t = ease_range_map(reveal, 0, 0.4)
     t = ease_interp(.EXPO_IN, 0.0, 1.0, (1 - t))
     offset = auto_cast (t * f32(-game_width))
 
-    draw_copy(arts, sprite_title_art, Vector2i{auto_cast (180 + offset), 18}, Vector4{1, 1, 1, 1})
+    draw_copy(&arts, sprite_title_art, Vector2i{auto_cast (180 + offset), 18}, Vector4{1, 1, 1, 1})
 }
 
 scene_title_update :: proc() {
@@ -273,22 +273,22 @@ draw_menu :: proc(t: f32) {
 
             case .INTEGER:
                 draw_text(&font_expire, Vector2i{auto_cast (125 + offset), auto_cast (first_option_y + (i * option_spacing))}, color, current_options[i].name)
-                draw_copy(arts, sprite_slider_bar, Vector2i{auto_cast (125 + offset + 100), auto_cast (first_option_y + (i * option_spacing))}, pal[3])
-                draw_copy(arts, sprite_slider_tag, Vector2i{auto_cast (125 + offset + 103 + (current_options[i].value_int * 3)), auto_cast (first_option_y + (i * option_spacing))}, pal[7])
+                draw_copy(&arts, sprite_slider_bar, Vector2i{auto_cast (125 + offset + 100), auto_cast (first_option_y + (i * option_spacing))}, pal[3])
+                draw_copy(&arts, sprite_slider_tag, Vector2i{auto_cast (125 + offset + 103 + (current_options[i].value_int * 3)), auto_cast (first_option_y + (i * option_spacing))}, pal[7])
 
             case .BOOL:
                 draw_text(&font_expire, Vector2i{auto_cast (125 + offset), auto_cast (first_option_y + (i * option_spacing))}, color, current_options[i].name)
                 if (current_options[i].value_int > 0) {
-                    draw_copy(arts, sprite_checkbox_on, Vector2i{auto_cast (125 + offset + 100), auto_cast (first_option_y + (i * option_spacing))}, pal[7])
+                    draw_copy(&arts, sprite_checkbox_on, Vector2i{auto_cast (125 + offset + 100), auto_cast (first_option_y + (i * option_spacing))}, pal[7])
                 } else {
-                    draw_copy(arts, sprite_checkbox_off, Vector2i{auto_cast (125 + offset + 100), auto_cast (first_option_y + (i * option_spacing))}, pal[3])
+                    draw_copy(&arts, sprite_checkbox_off, Vector2i{auto_cast (125 + offset + 100), auto_cast (first_option_y + (i * option_spacing))}, pal[3])
                 }
         }
     }
 
     pointer_offset: f32 = auto_cast (math.sin(rl.GetTime() * 10) * 4)
 
-    draw_sprite(arts, sprite_get_index(SpriteType.UI_HAND), Vector2i{auto_cast (f32(105 + offset) + pointer_offset), auto_cast (hand_pos - 2)}, pal[7])
+    draw_sprite(&arts, sprite_get_index(SpriteType.UI_HAND), Vector2i{auto_cast (f32(105 + offset) + pointer_offset), auto_cast (hand_pos - 2)}, pal[7])
 }
 
 set_first_valid_option :: proc() {

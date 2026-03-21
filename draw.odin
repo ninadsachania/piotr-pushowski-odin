@@ -8,15 +8,15 @@ CELL_HEIGHT :: 16
 camera_x: i32 = 0
 camera_y: i32 = 0
 
-draw_sprite_one :: proc(tex: rl.Texture2D, spr: SpriteType, draw_pos: Vector2i, color: Vector4) {
+draw_sprite_one :: proc(tex: ^rl.Texture2D, spr: SpriteType, draw_pos: Vector2i, color: Vector4) {
     // @Stub. @Incomplete.
 }
 
-draw_sprite_two :: proc(tex: rl.Texture2D, spr: SpriteType, draw_rect: Rect, color: Vector4) {
+draw_sprite_two :: proc(tex: ^rl.Texture2D, spr: SpriteType, draw_rect: Rect, color: Vector4) {
     // @Stub. @Incomplete.
 }
 
-draw_sprite_three :: proc(tex: rl.Texture2D, si: SpriteIndex, draw_pos: Vector2i, color: Vector4) {
+draw_sprite_three :: proc(tex: ^rl.Texture2D, si: SpriteIndex, draw_pos: Vector2i, color: Vector4) {
     pos := draw_pos
     pos.x += camera_x
     pos.y += camera_y
@@ -37,12 +37,12 @@ draw_sprite_three :: proc(tex: rl.Texture2D, si: SpriteIndex, draw_pos: Vector2i
 
     c := rl.ColorFromNormalized([4]f32{color.x, color.y, color.z, color.w})
 
-    rl.DrawTexturePro(tex, src_rect, dest_rect, [2]f32{ 0, 0 }, 0.0, c);
+    rl.DrawTexturePro(tex^, src_rect, dest_rect, [2]f32{ 0, 0 }, 0.0, c);
 }
 
 draw_sprite :: proc{draw_sprite_one, draw_sprite_two, draw_sprite_three}
 
-draw_copy :: proc(tex: rl.Texture2D, src: Rect, draw_pos: Vector2i, color: Vector4) {
+draw_copy :: proc(tex: ^rl.Texture2D, src: Rect, draw_pos: Vector2i, color: Vector4) {
     pos := draw_pos
     pos.x += camera_x
     pos.y += camera_y
@@ -63,7 +63,7 @@ draw_copy :: proc(tex: rl.Texture2D, src: Rect, draw_pos: Vector2i, color: Vecto
 
     c := rl.ColorFromNormalized([4]f32{color.x, color.y, color.z, color.w})
     
-    rl.DrawTexturePro(tex, src_rect, dest_rect, [2]f32{ 0, 0 }, 0.0, c)
+    rl.DrawTexturePro(tex^, src_rect, dest_rect, [2]f32{ 0, 0 }, 0.0, c)
 }
 
 draw_text :: proc(font: ^SpriteFont, draw_pos: Vector2i, color: Vector4, text: string) {
@@ -117,7 +117,7 @@ draw_text_internal :: proc(font: ^SpriteFont, draw_pos: Vector2i, color: Vector4
         glyph := font.glyphs[glyph_i]
 
         if !measure_only {
-            draw_copy(arts, Rect{glyph.x, glyph.y, glyph.width, glyph.height}, Vector2i{auto_cast pos_x, auto_cast pos_y}, color)
+            draw_copy(&arts, Rect{glyph.x, glyph.y, glyph.width, glyph.height}, Vector2i{auto_cast pos_x, auto_cast pos_y}, color)
         }
 
         pos_x += font.glyph_width + font.spacing_x
